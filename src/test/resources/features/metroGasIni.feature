@@ -1,5 +1,5 @@
 @metro
-Feature: MetroPrimerProyecto
+Feature: MetroCarlay
 
   @metrogas
   Scenario: Iniciar sesion en Metrogas
