@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.carlos'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.20.0'
+    testImplementation 'io.cucumber:cucumber-java:7.18.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.18.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
+}
+
+tasks.withType(Test).configureEach {
+    systemProperty "allure.results.directory", "build/allure-results"
+    useJUnitPlatform()
+}
+test {
+    useJUnitPlatform()
+}
