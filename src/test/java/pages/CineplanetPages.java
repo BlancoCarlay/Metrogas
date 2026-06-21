@@ -29,6 +29,7 @@ public class CineplanetPages extends BasePage {
     @FindBy(xpath = "//h2[text()='Sinopsis.']")
     private WebElement textSinopsis;
 
+
     public void setBtnX(){
         waitForClickable(btnX);
         btnX.click();

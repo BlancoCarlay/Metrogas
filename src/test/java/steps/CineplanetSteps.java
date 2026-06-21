@@ -1,9 +1,7 @@
 package steps;
 
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 import pages.CineplanetPages;
-import pages.MetroGasIniPage;
 import utils.DriverFactory;
 import utils.PropertiesLoader;
 

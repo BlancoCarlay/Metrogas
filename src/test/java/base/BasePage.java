@@ -66,6 +66,35 @@ public class BasePage {
     }
 
     // ============================
+    // ESPERA INVOCABLE DESDE GHERKIN
+    // ============================
+
+    public void esperarSegundos(int segundos) {
+        try {
+            Thread.sleep(segundos * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    // ============================
+    // SCROLL
+    // ============================
+
+    public void scrollDown() {
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 500);");
+    }
+
+    public void scrollUp() {
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -500);");
+    }
+
+    public void scrollToElement(By locator) {
+        WebElement element = waitForVisibility(locator);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    // ============================
     // ESPERAS PARA By
     // ============================
 
@@ -177,15 +206,66 @@ public class BasePage {
     }
 
     // ============================
-    // ASSERTS PROFESIONALES
+    // MÉTODO PARA GENERAR DIFF VISUAL
+    // ============================
+
+    private String generarDiff(String expected, String actual) {
+        int max = Math.min(expected.length(), actual.length());
+        int index = -1;
+
+        for (int i = 0; i < max; i++) {
+            if (expected.charAt(i) != actual.charAt(i)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1 && expected.length() != actual.length()) {
+            index = max;
+        }
+
+        if (index == -1) {
+            return "No differences found.";
+        }
+
+        StringBuilder pointer = new StringBuilder();
+        for (int i = 0; i < index; i++) {
+            pointer.append(" ");
+        }
+        pointer.append("^");
+
+        return "DIFF:\n" +
+                expected + "\n" +
+                actual + "\n" +
+                pointer;
+    }
+
+    // ============================
+    // ASSERTS PROFESIONALES (CON DIFF)
     // ============================
 
     protected void assertTextEquals(By locator, String expected) {
-        Assertions.assertEquals(expected, getText(locator));
+        String actual = getText(locator);
+
+        System.out.println("\n================ ASSERT TEXT EQUALS ================");
+        System.out.println("EXPECTED: [" + expected + "]");
+        System.out.println("FOUND:    [" + actual + "]");
+        System.out.println(generarDiff(expected, actual));
+        System.out.println("====================================================\n");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     protected void assertTextEquals(WebElement element, String expected) {
-        Assertions.assertEquals(expected, getText(element));
+        String actual = getText(element);
+
+        System.out.println("\n================ ASSERT TEXT EQUALS ================");
+        System.out.println("EXPECTED: [" + expected + "]");
+        System.out.println("FOUND:    [" + actual + "]");
+        System.out.println(generarDiff(expected, actual));
+        System.out.println("====================================================\n");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     protected void assertContainsText(By locator, String expected) {
@@ -215,4 +295,6 @@ public class BasePage {
     protected void assertUrlIs(String expected) {
         Assertions.assertTrue(waitForUrlIs(expected));
     }
+
+
 }
