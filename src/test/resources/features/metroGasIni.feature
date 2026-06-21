@@ -1,5 +1,6 @@
 @metro
-Feature: Metro
+Feature: MetroPrimerProyecto
+
   @metrogas
   Scenario: Iniciar sesion en Metrogas
     Given estoy en la pagina inicial de Metrogas
