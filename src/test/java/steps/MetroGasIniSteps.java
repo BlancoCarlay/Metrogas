@@ -1,6 +1,5 @@
 package steps;
 
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 import pages.MetroGasIniPage;
 import utils.DriverFactory;
@@ -20,6 +19,7 @@ public class MetroGasIniSteps {
 
     @And("cierro el modal informativo")
     public void cierroElModalInformativo() {
+
         metroGasIniPage.setBtnEntendido();
     }
 

@@ -7,15 +7,62 @@ import utils.DriverFactory;
 import org.junit.jupiter.api.Assertions;
 
 import java.time.Duration;
+import java.util.List;
 
 public class BasePage {
 
     protected WebDriver driver;
-    protected WebDriverWait wait;
+    protected WebDriverWait wait;          // Espera explícita estándar (20s)
+    protected WebDriverWait shortWait;     // Espera explícita corta (5s)
+    protected WebDriverWait longWait;      // Espera explícita larga (40s)
 
     public BasePage() {
         this.driver = DriverFactory.getDriver();
+
+        // ============================
+        // ESPERA IMPLÍCITA GLOBAL
+        // ============================
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+        // ============================
+        // ESPERAS EXPLÍCITAS
+        // ============================
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        this.shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        this.longWait = new WebDriverWait(driver, Duration.ofSeconds(40));
+
+        // ============================
+        // ESPERAR CARGA COMPLETA REAL
+        // ============================
+        waitForFullLoad();
+    }
+
+    // ============================
+    // ESPERA PARA CARGA COMPLETA DE PÁGINA (DOM + AJAX + jQuery)
+    // ============================
+
+    protected void waitForFullLoad() {
+
+        // 1. Esperar que el DOM esté completo
+        try {
+            wait.until(driver -> ((JavascriptExecutor) driver)
+                    .executeScript("return document.readyState").equals("complete"));
+        } catch (Exception ignored) {}
+
+        // 2. Micro pausa para estabilizar animaciones
+        try { Thread.sleep(300); } catch (Exception ignored) {}
+
+        // 3. Esperar jQuery si existe
+        try {
+            wait.until(driver -> (Boolean) ((JavascriptExecutor) driver)
+                    .executeScript("return window.jQuery != null && jQuery.active === 0"));
+        } catch (Exception ignored) {}
+
+        // 4. Esperar fetch/requests personalizados
+        try {
+            wait.until(driver -> ((JavascriptExecutor) driver)
+                    .executeScript("return (window.pendingRequests || 0) === 0"));
+        } catch (Exception ignored) {}
     }
 
     // ============================
@@ -30,6 +77,18 @@ public class BasePage {
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
+    protected WebElement waitForPresence(By locator) {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
+    protected boolean waitForInvisibility(By locator) {
+        return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
+    protected List<WebElement> waitForAllVisible(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
+
     // ============================
     // ESPERAS PARA WebElement
     // ============================
@@ -40,6 +99,26 @@ public class BasePage {
 
     protected WebElement waitForClickable(WebElement element) {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    protected boolean waitForInvisibility(WebElement element) {
+        return wait.until(ExpectedConditions.invisibilityOf(element));
+    }
+
+    // ============================
+    // ESPERAS AVANZADAS
+    // ============================
+
+    protected boolean waitForAttribute(By locator, String attribute, String value) {
+        return wait.until(ExpectedConditions.attributeContains(locator, attribute, value));
+    }
+
+    protected boolean waitForUrlContains(String fragment) {
+        return wait.until(ExpectedConditions.urlContains(fragment));
+    }
+
+    protected boolean waitForUrlIs(String url) {
+        return wait.until(ExpectedConditions.urlToBe(url));
     }
 
     // ============================
@@ -126,14 +205,14 @@ public class BasePage {
     }
 
     protected void assertNotVisible(By locator) {
-        Assertions.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementLocated(locator)));
+        Assertions.assertTrue(waitForInvisibility(locator));
     }
 
     protected void assertUrlContains(String fragment) {
-        Assertions.assertTrue(wait.until(ExpectedConditions.urlContains(fragment)));
+        Assertions.assertTrue(waitForUrlContains(fragment));
     }
 
     protected void assertUrlIs(String expected) {
-        Assertions.assertTrue(wait.until(ExpectedConditions.urlToBe(expected)));
+        Assertions.assertTrue(waitForUrlIs(expected));
     }
 }
