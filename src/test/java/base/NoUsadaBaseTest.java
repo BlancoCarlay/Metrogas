@@ -4,7 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import utils.DriverFactory;
 
-public class BaseTest {
+public class NoUsadaBaseTest {
 
     @BeforeEach
     public void setUp() {

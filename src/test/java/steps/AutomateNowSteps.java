@@ -70,4 +70,36 @@ public class AutomateNowSteps {
     public void presionoElBotonSubmitYVeoElMensajeFinal() {
         automateNowPage.setBtnSub();
     }
+
+    //Pasos del caso 2
+    //Para este caso se reutilizo el Given del caso 1
+    @And("hago click en el boton para clickear opciones")
+    public void hagoClickEnElBotonParaClickearOpciones() {
+        automateNowPage.setBtnClick();
+    }
+
+    @And("hago click en el boton de Gato")
+    public void hagoClickEnElBotonDeGato() {
+        automateNowPage.setBtnGato();
+    }
+
+    @And("valido que se muestre el texto {string}")
+    public void validoQueSeMuestreElTexto(String animal) {
+        automateNowPage.setTextGato(animal);
+    }
+
+    @And("hago click en el boton de Perro")
+    public void hagoClickEnElBotonDePerro() {
+        automateNowPage.setBtnPero();
+    }
+
+    @And("hago click en el boton de Puerco")
+    public void hagoClickEnElBotonDePuerco() {
+        automateNowPage.setBtnPuerco();
+    }
+
+    @When("hago click en el boton de Vaca")
+    public void hagoClickEnElBotonDeVaca() {
+        automateNowPage.setBtnVaca();
+    }
 }

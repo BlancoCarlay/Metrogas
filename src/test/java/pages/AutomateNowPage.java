@@ -45,6 +45,33 @@ public class AutomateNowPage extends BasePage {
     @FindBy(xpath = "//button[@id='submit-btn']")
     private WebElement btnSub;
 
+    //Xpath del caso 2
+    @FindBy(xpath = "//a[@class='wp-block-button__link wp-element-button' and @href='https://practice-automation.com/click-events/']")
+    private WebElement btnClick;
+
+    @FindBy(xpath = "//button[@onclick='catSound()']")
+    private WebElement btnGato;
+
+    @FindBy(xpath = "//h2[text()='Meow!']")
+    private WebElement textGato;
+
+    @FindBy(xpath = "//button[@onclick='dogSound()']")
+    private WebElement btnPero;
+
+    @FindBy(xpath = "//h2[text()='Woof!']")
+    private WebElement textPerro;
+
+    @FindBy(xpath = "//button[@onclick='pigSound()']")
+    private WebElement btnPuerco;
+
+    @FindBy(xpath = "//h2[text()='Oink!']")
+    private WebElement textPrueco;
+
+    @FindBy (xpath = "//button[@onclick='cowSound()']")
+    private WebElement btnVaca;
+
+    @FindBy(xpath = "//h2[text()='Moo!']")
+    private WebElement textVaca;
 
     public void setBtnForm() {
         waitForClickable(btnForm);
@@ -112,6 +139,71 @@ public class AutomateNowPage extends BasePage {
         waitForVisibility(btnSub);
         scrollDown();
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnSub);
+        esperarSegundos(2);
+    }
+
+    //Funsiones del caso 2
+    public void setBtnClick(){
+        waitForClickable(btnClick);
+        scrollPageByElementHeight(btnClick,25);
+        esperarSegundos(2);
+        btnClick.click();
+        esperarSegundos(2);
+    }
+
+    public void setBtnGato(){
+        waitForClickable(btnGato);
+        btnGato.click();
+        esperarSegundos(2);
+    }
+
+    public void setTextGato(String animal){
+        switch (animal.toLowerCase()) {
+
+            case "meow!":
+                waitForVisibility(textGato);
+                assertTextEquals(textGato, animal);
+                esperarSegundos(2);
+                break;
+
+            case "woof!":
+                waitForVisibility(textPerro);
+                assertTextEquals(textPerro, animal);
+                esperarSegundos(2);
+                break;
+
+            case "oink!":
+                waitForVisibility(textPrueco);
+                assertTextEquals(textPrueco, animal);
+                esperarSegundos(2);
+                break;
+
+            case "moo!":
+                waitForVisibility(textVaca);
+                assertTextEquals(textVaca, animal);
+                esperarSegundos(2);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Animal no válido: " + animal);
+        }
+    }
+
+    public void setBtnPero(){
+        waitForClickable(btnPero);
+        btnPero.click();
+        esperarSegundos(2);
+    }
+
+    public void setBtnPuerco(){
+        waitForClickable(btnPuerco);
+        btnPuerco.click();
+        esperarSegundos(2);
+    }
+
+    public void setBtnVaca(){
+        waitForClickable(btnVaca);
+        btnVaca.click();
         esperarSegundos(2);
     }
 

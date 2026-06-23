@@ -78,7 +78,7 @@ public class BasePage {
     }
 
     // ============================
-    // SCROLL
+    // SCROLL GENERAL
     // ============================
 
     public void scrollDown() {
@@ -89,33 +89,72 @@ public class BasePage {
         ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -500);");
     }
 
-    public void scrollToElement(By locator) {
-        WebElement element = waitForVisibility(locator);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    public void scrollToElement(WebElement element) {
+        waitForVisibility(element);
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior:'auto', block:'center'});",
+                element
+        );
+    }
+
+    public void scrollToBottom() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        try { Thread.sleep(500); } catch (Exception ignored) {}
     }
 
     // ============================
-    // ESPERAS PARA By
+    // SCROLL INTERNO EN WebElement
     // ============================
 
-    protected WebElement waitForVisibility(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    // Scroll interno hasta el final del elemento
+    public void scrollInsideElement(WebElement element) {
+        waitForVisibility(element);
+
+        ((JavascriptExecutor) driver).executeScript(
+                "if (arguments[0].scrollHeight > arguments[0].clientHeight) {" +
+                        "   arguments[0].scrollTop = arguments[0].scrollHeight;" +
+                        "}",
+                element
+        );
+
+        try { Thread.sleep(300); } catch (Exception ignored) {}
     }
 
-    protected WebElement waitForClickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
+    // Scroll interno por altura específica (corrige negativos y límites)
+    public void scrollInsideElementBy(WebElement element, int height) {
+        waitForVisibility(element);
+
+        ((JavascriptExecutor) driver).executeScript(
+                "var el = arguments[0];" +
+                        "var delta = Number(arguments[1]);" +
+                        "if (el.scrollHeight <= el.clientHeight) return;" + // no es scrollable
+                        "var target = el.scrollTop + delta;" +
+                        "if (target < 0) target = 0;" +
+                        "if (target > el.scrollHeight) target = el.scrollHeight;" +
+                        "el.scrollTop = target;",
+                element, height
+        );
+
+        try { Thread.sleep(200); } catch (Exception ignored) {}
     }
 
-    protected WebElement waitForPresence(By locator) {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-    }
+    // ============================
+    // SCROLL DE PÁGINA BASADO EN ALTURA DEL ELEMENTO
+    // ============================
 
-    protected boolean waitForInvisibility(By locator) {
-        return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
-    }
+    public void scrollPageByElementHeight(WebElement element, int factor) {
+        waitForVisibility(element);
 
-    protected List<WebElement> waitForAllVisible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        int height = element.getSize().getHeight();
+        int delta = height * factor;
+
+        ((JavascriptExecutor) driver).executeScript(
+                "window.scrollBy(0, arguments[0]);",
+                delta
+        );
+
+        try { Thread.sleep(200); } catch (Exception ignored) {}
     }
 
     // ============================
@@ -134,12 +173,16 @@ public class BasePage {
         return wait.until(ExpectedConditions.invisibilityOf(element));
     }
 
+    protected List<WebElement> waitForAllVisible(List<WebElement> elements) {
+        return wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+    }
+
     // ============================
     // ESPERAS AVANZADAS
     // ============================
 
-    protected boolean waitForAttribute(By locator, String attribute, String value) {
-        return wait.until(ExpectedConditions.attributeContains(locator, attribute, value));
+    protected boolean waitForAttribute(WebElement element, String attribute, String value) {
+        return wait.until(ExpectedConditions.attributeContains(element, attribute, value));
     }
 
     protected boolean waitForUrlContains(String fragment) {
@@ -151,24 +194,6 @@ public class BasePage {
     }
 
     // ============================
-    // ACCIONES PARA By
-    // ============================
-
-    protected void click(By locator) {
-        waitForClickable(locator).click();
-    }
-
-    protected void write(By locator, String text) {
-        WebElement element = waitForVisibility(locator);
-        element.clear();
-        element.sendKeys(text);
-    }
-
-    protected String getText(By locator) {
-        return waitForVisibility(locator).getText();
-    }
-
-    // ============================
     // ACCIONES PARA WebElement
     // ============================
 
@@ -177,8 +202,9 @@ public class BasePage {
     }
 
     protected void write(WebElement element, String text) {
-        waitForVisibility(element).clear();
-        element.sendKeys(text);
+        WebElement el = waitForVisibility(element);
+        el.clear();
+        el.sendKeys(text);
     }
 
     protected String getText(WebElement element) {
@@ -188,14 +214,6 @@ public class BasePage {
     // ============================
     // VISIBILIDAD
     // ============================
-
-    protected boolean isDisplayed(By locator) {
-        try {
-            return waitForVisibility(locator).isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
 
     protected boolean isDisplayed(WebElement element) {
         try {
@@ -244,18 +262,6 @@ public class BasePage {
     // ASSERTS PROFESIONALES (CON DIFF)
     // ============================
 
-    protected void assertTextEquals(By locator, String expected) {
-        String actual = getText(locator);
-
-        System.out.println("\n================ ASSERT TEXT EQUALS ================");
-        System.out.println("EXPECTED: [" + expected + "]");
-        System.out.println("FOUND:    [" + actual + "]");
-        System.out.println(generarDiff(expected, actual));
-        System.out.println("====================================================\n");
-
-        Assertions.assertEquals(expected, actual);
-    }
-
     protected void assertTextEquals(WebElement element, String expected) {
         String actual = getText(element);
 
@@ -268,24 +274,16 @@ public class BasePage {
         Assertions.assertEquals(expected, actual);
     }
 
-    protected void assertContainsText(By locator, String expected) {
-        Assertions.assertTrue(getText(locator).contains(expected));
-    }
-
     protected void assertContainsText(WebElement element, String expected) {
         Assertions.assertTrue(getText(element).contains(expected));
-    }
-
-    protected void assertVisible(By locator) {
-        Assertions.assertTrue(isDisplayed(locator));
     }
 
     protected void assertVisible(WebElement element) {
         Assertions.assertTrue(isDisplayed(element));
     }
 
-    protected void assertNotVisible(By locator) {
-        Assertions.assertTrue(waitForInvisibility(locator));
+    protected void assertNotVisible(WebElement element) {
+        Assertions.assertTrue(waitForInvisibility(element));
     }
 
     protected void assertUrlContains(String fragment) {
@@ -295,6 +293,5 @@ public class BasePage {
     protected void assertUrlIs(String expected) {
         Assertions.assertTrue(waitForUrlIs(expected));
     }
-
 
 }

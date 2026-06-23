@@ -14,3 +14,16 @@ Feature: AutomateNow
     And ingreso el correo "prueba@gmail.com" al input del email
     When ingreso el mensaje "Soy automatizadora" en el area de texto
     Then presiono el boton Submit y veo el mensaje final
+
+  @Click
+  Scenario: Hacer click en botones
+    Given ingreso al link de AutomateNow
+    And hago click en el boton para clickear opciones
+    And hago click en el boton de Gato
+    And valido que se muestre el texto "Meow!"
+    And hago click en el boton de Perro
+    And valido que se muestre el texto "Woof!"
+    And hago click en el boton de Puerco
+    And valido que se muestre el texto "Oink!"
+    When hago click en el boton de Vaca
+    Then valido que se muestre el texto "Moo!"
