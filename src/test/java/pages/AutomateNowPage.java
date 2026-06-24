@@ -73,6 +73,24 @@ public class AutomateNowPage extends BasePage {
     @FindBy(xpath = "//h2[text()='Moo!']")
     private WebElement textVaca;
 
+    @FindBy(xpath = "//a[@class='wp-block-button__link wp-element-button' and @href='https://practice-automation.com/iframes/']")
+    private WebElement btnIframes;
+
+    @FindBy(xpath = "//iframe[contains(@src,'https://playwright.dev/')]")
+    private WebElement ifrPlay;
+
+    @FindBy(xpath = "//span[@class='highlight_gXVj' and text()='Playwright']")
+    private WebElement ifrPlay2;
+
+    @FindBy(xpath = "//iframe[contains(@src,'https://www.selenium.dev/')]")
+    private WebElement ifrSel;
+
+    @FindBy(xpath = "//a[@href='/sponsors' and @class='selenium-button selenium-white-cyan text-uppercase fw-bold']")
+    private WebElement textLearn;
+
+    @FindBy(xpath = "//a[@href='https://www.shipfox.io']")
+    private WebElement btnShip;
+
     public void setBtnForm() {
         waitForClickable(btnForm);
         // Click forzado (evita interceptación)
@@ -206,5 +224,64 @@ public class AutomateNowPage extends BasePage {
         btnVaca.click();
         esperarSegundos(2);
     }
+
+    //Caso 3
+    public void setBtnIframes(){
+        waitForClickable(btnIframes);
+        scrollPageByElementHeight(btnIframes,30);
+        esperarSegundos(2);
+        btnIframes.click();
+        esperarSegundos(2);
+    }
+
+    public void setIfrPlay(){
+        waitForVisibility(ifrPlay);
+        waitForClickable(ifrPlay);
+        scrollPageByElementHeight(ifrPlay,1);
+        driver.switchTo().frame(ifrPlay);
+        esperarSegundos(2);
+
+        waitForVisibility(ifrPlay2);
+        scrollPageByElementHeight(ifrPlay2,35);
+        driver.switchTo().defaultContent();
+        esperarSegundos(2);
+    }
+
+    public void setIfrSel(){
+        waitForVisibility(ifrSel);
+        waitForClickable(ifrSel);
+        scrollPageByElementHeight(ifrSel,1);
+        driver.switchTo().frame(ifrSel);
+        esperarSegundos(2);
+    }
+
+    public void setTextLearn(String opc){
+        waitForVisibility(textLearn);
+        waitForClickable(textLearn);
+        scrollPageByElementHeight(textLearn,110);
+        assertTextEquals(textLearn, opc);
+        esperarSegundos(2);
+    }
+
+    public void setTextLearnClick(){
+        waitForClickable(textLearn);
+        textLearn.click();
+        esperarSegundos(2);
+    }
+
+    public void setBtnShip(){
+        waitForVisibility(btnShip);
+        waitForClickable(btnShip);
+        scrollPageByElementHeight(btnShip,55);
+        esperarSegundos(2);
+    }
+
+    public void setBtnShip2(){
+        waitForVisibility(btnShip);
+        waitForClickable(btnShip);
+        btnShip.click();
+        esperarSegundos(2);
+    }
+
 
 }

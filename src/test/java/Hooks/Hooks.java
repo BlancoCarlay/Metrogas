@@ -42,35 +42,40 @@ public class Hooks {
     @After
     public void tearDown(Scenario scenario) {
 
-        // ============================
-        // 0. Cerrar alert si existe
-        // ============================
-        manejarAlertSiExiste();
-
-        // ============================
-        // 1. Screenshot SIEMPRE
-        // ============================
-        byte[] screenshot = null;
-
         try {
-            screenshot = ((TakesScreenshot) DriverFactory.getDriver())
-                    .getScreenshotAs(OutputType.BYTES);
-        } catch (UnhandledAlertException e) {
-            System.out.println("⚠ ALERT BLOQUEÓ EL SCREENSHOT. Reintentando...");
-
+            // ============================
+            // 0. Cerrar alert si existe
+            // ============================
             manejarAlertSiExiste();
 
-            screenshot = ((TakesScreenshot) DriverFactory.getDriver())
-                    .getScreenshotAs(OutputType.BYTES);
+            // ============================
+            // 1. Screenshot SIEMPRE
+            // ============================
+            byte[] screenshot;
+
+            try {
+                screenshot = ((TakesScreenshot) DriverFactory.getDriver())
+                        .getScreenshotAs(OutputType.BYTES);
+
+            } catch (UnhandledAlertException e) {
+                System.out.println("⚠ ALERT BLOQUEÓ EL SCREENSHOT. Reintentando...");
+
+                manejarAlertSiExiste();
+
+                screenshot = ((TakesScreenshot) DriverFactory.getDriver())
+                        .getScreenshotAs(OutputType.BYTES);
+            }
+
+            scenario.attach(screenshot, "image/png", scenario.getName());
+            saveScreenshotToFramework(scenario.getName(), screenshot);
+
+        } finally {
+            // ============================
+            // 2. Cerrar driver SIEMPRE
+            // ============================
+            System.out.println("🔻 Cerrando driver desde @After...");
+            DriverFactory.quitDriver();
         }
-
-        scenario.attach(screenshot, "image/png", scenario.getName());
-        saveScreenshotToFramework(scenario.getName(), screenshot);
-
-        // ============================
-        // 2. Cerrar driver
-        // ============================
-        DriverFactory.quitDriver();
     }
 
     // ============================================
@@ -80,6 +85,10 @@ public class Hooks {
     public static void generateReport() {
 
         try {
+            // Cierre adicional por seguridad
+            System.out.println("🔻 Cierre final del driver desde @AfterAll...");
+            DriverFactory.quitDriver();
+
             String timestamp = LocalDateTime.now()
                     .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
 

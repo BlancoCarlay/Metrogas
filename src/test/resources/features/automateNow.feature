@@ -27,3 +27,14 @@ Feature: AutomateNow
     And valido que se muestre el texto "Oink!"
     When hago click en el boton de Vaca
     Then valido que se muestre el texto "Moo!"
+
+  @Iframe
+  Scenario: Hacer click en iframes
+    Given ingreso al link de AutomateNow
+    And hago click en el boton para clickear iframes
+    And ubico el iframe de playwright
+    And ubico el iframe de selenium
+    And bajo hasta encontrar la opcion "LEARN MORE"
+    When hago click sobre el texto LEARN MORE
+    And busco la opcion ShipFox
+    Then hago click sobre la opcion ShipFox

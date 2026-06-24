@@ -102,4 +102,41 @@ public class AutomateNowSteps {
     public void hagoClickEnElBotonDeVaca() {
         automateNowPage.setBtnVaca();
     }
+
+    //Pasos del caso 3
+    //Para este caso se reutilizo el Given del caso 1
+    @And("hago click en el boton para clickear iframes")
+    public void hagoClickEnElBotonParaClickearIframes() {
+        automateNowPage.setBtnIframes();
+    }
+
+    @And("ubico el iframe de playwright")
+    public void ubicoElIframeDePlaywright() {
+        automateNowPage.setIfrPlay();
+    }
+
+    @And("ubico el iframe de selenium")
+    public void ubicoElIframeDeSelenium() {
+        automateNowPage.setIfrSel();
+    }
+
+    @And("bajo hasta encontrar la opcion {string}")
+    public void bajoHastaEncontrarLaOpcion(String opc) {
+        automateNowPage.setTextLearn(opc);
+    }
+
+    @When("hago click sobre el texto LEARN MORE")
+    public void hagoClickSobreElTextoLEARNMORE() {
+        automateNowPage.setTextLearnClick();
+    }
+
+    @And("busco la opcion ShipFox")
+    public void buscoLaOpcionShipFox() {
+        automateNowPage.setBtnShip();
+    }
+
+    @Then("hago click sobre la opcion ShipFox")
+    public void hagoClickSobreLaOpcionShipFox() {
+        automateNowPage.setBtnShip2();
+    }
 }
