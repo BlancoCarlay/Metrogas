@@ -122,6 +122,7 @@ public class AutomateNowSteps {
 
     @And("bajo hasta encontrar la opcion {string}")
     public void bajoHastaEncontrarLaOpcion(String opc) {
+
         automateNowPage.setTextLearn(opc);
     }
 
@@ -138,5 +139,42 @@ public class AutomateNowSteps {
     @Then("hago click sobre la opcion ShipFox")
     public void hagoClickSobreLaOpcionShipFox() {
         automateNowPage.setBtnShip2();
+    }
+
+    //Caso4
+    //Para este caso se reutilizo el Given del caso 1
+    @And("hago click en el boton para clickear popups")
+    public void hagoClickEnElBotonParaClickearPopups() {
+        automateNowPage.setBtnPop();
+    }
+
+    @And("hago click en Alert Popup")
+    public void hagoClickEnAlertPopup() {
+        automateNowPage.setBtnAlertPop();
+    }
+
+    @When("hago click en Confirm Popup")
+    public void hagoClickEnConfirmPopup() {
+        automateNowPage.setBtnConfirmPop();
+    }
+
+    @And("valido el texto {string}")
+    public void validoElTexto(String RespPop) {
+        automateNowPage.setTextRespPop(RespPop);
+    }
+
+    @And("hago click en cancelar alerta para la opcion Confirm Popup")
+    public void hagoClickEnCancelarAlertaParaLaOpcionConfirmPopup() {
+        automateNowPage.setBtnCancelarPop();
+    }
+
+    @And("hago click en la opcion Prompt Popup e ingreso {string}")
+    public void hagoClickEnLaOpcionPromptPopupEIngreso(String name) {
+        automateNowPage.setBtnProntPop(name);
+    }
+
+    @When("hago click en la opcion Prompt Popup y cancelo la opcion")
+    public void hagoClickEnLaOpcionPromptPopup() {
+        automateNowPage.setBtnCancelProntPop();
     }
 }

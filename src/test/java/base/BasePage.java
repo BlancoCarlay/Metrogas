@@ -294,4 +294,38 @@ public class BasePage {
         Assertions.assertTrue(waitForUrlIs(expected));
     }
 
+    public void aceptarAlerta() {
+        try {
+            Alert alert = driver.switchTo().alert();
+            alert.accept();
+        } catch (NoAlertPresentException e) {
+            System.out.println("No hay alerta presente.");
+        }
+    }
+
+    public void cancelarAlerta() {
+        try {
+            Alert alert = driver.switchTo().alert();
+            System.out.println("ALERTA DETECTADA: " + alert.getText());
+            alert.dismiss();
+            System.out.println("ALERTA CANCELADA");
+        } catch (NoAlertPresentException e) {
+            System.out.println("No hay alerta presente.");
+        }
+    }
+
+    public void ingresarTextoEnAlerta(String texto) {
+        try {
+            Alert alert = driver.switchTo().alert();
+            System.out.println("ALERTA DETECTADA: " + alert.getText());
+            alert.sendKeys(texto);
+            alert.accept();
+            System.out.println("TEXTO INGRESADO Y ALERTA ACEPTADA");
+        } catch (NoAlertPresentException e) {
+            System.out.println("No hay alerta presente.");
+        }
+    }
+
 }
+
+

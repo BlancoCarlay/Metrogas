@@ -1,9 +1,12 @@
 package pages;
 
 import base.BasePage;
+import dev.failsafe.internal.util.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AutomateNowPage extends BasePage {
     private WebDriver driver;
@@ -90,6 +93,31 @@ public class AutomateNowPage extends BasePage {
 
     @FindBy(xpath = "//a[@href='https://www.shipfox.io']")
     private WebElement btnShip;
+
+    //Caso 4
+    @FindBy(xpath = "//a[@class='wp-block-button__link wp-element-button' and @href='https://practice-automation.com/popups/']")
+    private WebElement btnPop;
+
+    @FindBy(xpath = "//button[@onclick='alertPopup()']")
+    private WebElement btnAlertPop;
+
+    @FindBy(xpath = "//button[@onclick='confirmPopup()']")
+    private WebElement btnConfirmPop;
+
+    @FindBy(xpath = "//p[@id='confirmResult' and text()='OK it is!']")
+    private WebElement textConfirmPop;
+
+    @FindBy(xpath = "//p[@id='confirmResult' and text()='Cancel it is!']")
+    private WebElement textCancelPop;
+
+    @FindBy(xpath = "//button[@onclick='promptPopup()']")
+    private  WebElement btnProntPop;
+
+    @FindBy(css = "#promptResult")
+    private  WebElement textNice;
+
+    @FindBy(css = "#promptResult")
+    private WebElement textCancelNice;
 
     public void setBtnForm() {
         waitForClickable(btnForm);
@@ -283,5 +311,93 @@ public class AutomateNowPage extends BasePage {
         esperarSegundos(2);
     }
 
+    //Caso 4
+    public void setBtnPop(){
+        waitForVisibility(btnPop);
+        waitForClickable(btnPop);
+        scrollPageByElementHeight(btnPop,5);
+        btnPop.click();
+        esperarSegundos(2);
+    }
+
+    public void setBtnAlertPop(){
+        waitForVisibility(btnAlertPop);
+        waitForClickable(btnAlertPop);
+        btnAlertPop.click();
+        esperarSegundos(2);
+        aceptarAlerta();
+        esperarSegundos(2);
+    }
+
+    public void setBtnConfirmPop(){
+        waitForVisibility(btnConfirmPop);
+        waitForClickable(btnConfirmPop);
+        btnConfirmPop.click();
+        esperarSegundos(2);
+        aceptarAlerta();
+        esperarSegundos(2);
+    }
+
+    public void setTextRespPop(String RespPop){
+        //waitForVisibility(textConfirmPop);
+        //assertTextEquals(textConfirmPop, RespPop);
+        //esperarSegundos(2);
+        switch (RespPop.toLowerCase()) {
+
+            case "ok it is!":
+                waitForVisibility(textConfirmPop);
+                assertTextEquals(textConfirmPop, RespPop);
+                esperarSegundos(2);
+                break;
+
+            case "cancel it is!":
+                waitForVisibility(textCancelPop);
+                assertTextEquals(textCancelPop, RespPop);
+                esperarSegundos(2);
+                break;
+
+            case "nice to meet you, carlay!":
+                waitForVisibility(textNice);
+                assertTextEquals(textNice, RespPop);
+                esperarSegundos(2);
+                break;
+
+            case "fine, be that way...":
+                waitForVisibility(textCancelNice);
+                assertTextEquals(textCancelNice, RespPop);
+                esperarSegundos(2);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Opción no válida: " + RespPop);
+        }
+    }
+
+    public void setBtnCancelarPop(){
+        waitForVisibility(btnConfirmPop);
+        waitForClickable(btnConfirmPop);
+        btnConfirmPop.click();
+        esperarSegundos(2);
+        cancelarAlerta();
+        esperarSegundos(2);
+    }
+
+    public void setBtnProntPop(String name){
+        waitForVisibility(btnProntPop);
+        waitForClickable(btnProntPop);
+        btnProntPop.click();
+        esperarSegundos(2);
+        ingresarTextoEnAlerta(name);
+        esperarSegundos(2);
+    }
+
+    public void setBtnCancelProntPop(){
+        waitForVisibility(btnProntPop);
+        waitForClickable(btnProntPop);
+        btnProntPop.click();
+        esperarSegundos(2);
+        cancelarAlerta();
+        esperarSegundos(2);
+    }
 
 }

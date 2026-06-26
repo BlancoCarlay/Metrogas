@@ -38,3 +38,17 @@ Feature: AutomateNow
     When hago click sobre el texto LEARN MORE
     And busco la opcion ShipFox
     Then hago click sobre la opcion ShipFox
+
+    @Pop
+    Scenario: Hacer click en popups
+      Given ingreso al link de AutomateNow
+      And hago click en el boton para clickear popups
+      And hago click en Alert Popup
+      And hago click en Confirm Popup
+      And valido el texto "OK it is!"
+      And hago click en cancelar alerta para la opcion Confirm Popup
+      And valido el texto "Cancel it is!"
+      And hago click en la opcion Prompt Popup e ingreso "Carlay"
+      And valido el texto "Nice to meet you, Carlay!"
+      When hago click en la opcion Prompt Popup y cancelo la opcion
+      Then valido el texto "Fine, be that way..."
