@@ -8,12 +8,12 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 
 @Suite
 // 👉 AQUÍ ELIGES EL FEATURE QUE QUIERES EJECUTAR
-@SelectClasspathResource("features/automateNow.feature")
+@SelectClasspathResource("features/automateNow2.feature")
 
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "steps,Hooks")
 
 // 👉 AQUÍ ELIGES EL TAG QUE QUIERES EJECUTAR
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Pop")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Modal")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
 
 public class TestRunner {

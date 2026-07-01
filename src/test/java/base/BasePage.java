@@ -326,6 +326,25 @@ public class BasePage {
         }
     }
 
+    public void enmarcarRojo(WebDriver driver, WebElement elemento) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        // Crear un borde rojo alrededor del elemento
+        String script =
+                "arguments[0].style.outline='3px solid red';" +   // borde rojo externo
+                        "arguments[0].style.outlineOffset='2px';";        // separación como en tu imagen
+
+        js.executeScript(script, elemento);
+
+        // Mantener visible 1.5 segundos
+        try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
+
+        // Restaurar estilos originales
+        js.executeScript(
+                "arguments[0].style.outline='';" +
+                        "arguments[0].style.outlineOffset='';",
+                elemento
+        );
+    }
+
 }
-
-
