@@ -18,3 +18,15 @@ Feature: AutomateNow2
     And valido que se muestre el texto en la pagina "Prueba de Carlay"
     When cierro el formulario del modal en la X
     Then valido que se muestre el texto en la pagina "Modals"
+
+    @Calendario
+    Scenario: Seleccionar fecha del calendario
+      Given ingreso al link de AutomateNow2
+      And hago click en el boton para seleccionar fechas del calenadio
+      And hago click sobre el texto que despliega el calendario
+      And selecciono el ano 1988 en el calendario
+      And selecciono el mes de noviembre en el calendario
+      And selecciono el dia 16 en el calendario
+      When hago click sobre el boton submit
+      Then valido que se muestre el texto en la pagina "Thank you for your response."
+      And valido que se muestre el texto en la pagina "1988-11-16"

@@ -13,7 +13,7 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "steps,Hooks")
 
 // 👉 AQUÍ ELIGES EL TAG QUE QUIERES EJECUTAR
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Modal")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Calendario")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
 
 public class TestRunner {

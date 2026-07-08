@@ -69,4 +69,35 @@ public class AutomateNow2Steps {
     public void cierroElFormularioDelModalEnLaX() {
         automateNow2Page.setBtnX2();
     }
+
+    //Caso 2
+    @And("hago click en el boton para seleccionar fechas del calenadio")
+    public void hagoClickEnElBotonParaSeleccionarFechasDelCalenadio() {
+        automateNow2Page.setBtnCalendario();
+    }
+
+    @And("hago click sobre el texto que despliega el calendario")
+    public void hagoClickSobreElTextoQueDespliegaElCalendario() {
+        automateNow2Page.setBtnTextCalendario();
+    }
+
+    @And("selecciono el ano {int} en el calendario")
+    public void seleccionoElAnoEnElCalendario(int arg0) {
+        automateNow2Page.setBtnAno();
+    }
+
+    @And("selecciono el mes de noviembre en el calendario")
+    public void seleccionoElMesDeNoviembreEnElCalendario() {
+        automateNow2Page.setBtnMes();
+    }
+
+    @And("selecciono el dia {int} en el calendario")
+    public void seleccionoElDiaEnElCalendario(int arg0) {
+        automateNow2Page.setBtn16();
+    }
+
+    @When("hago click sobre el boton submit")
+    public void hagoClickSobreElBotonSubmit() {
+        automateNow2Page.setBtnSubmitCal();
+    }
 }
