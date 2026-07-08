@@ -1,4 +1,4 @@
-@NowTag
+@Now
 Feature: AutomateNow2
 
   @Modal
